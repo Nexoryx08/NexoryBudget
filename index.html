@@ -27,4 +27,22 @@ function goal(){const target=num('g-target'),start=num('g-start'),months=num('g-
 function profit(){const price=num('p-price'),variable=num('p-variable'),qty=num('p-qty'),fixed=num('p-fixed');if(!valid([[price,0,1e12],[variable,0,1e12],[qty,0,1e8],[fixed,0,1e12]])||!Number.isInteger(qty)){set('p-message','Veuillez saisir des valeurs valides.');return}const revenue=price*qty,cost=variable*qty+fixed,profit=revenue-cost,margin=price-variable;const breakEven=margin>0?Math.ceil(fixed/margin):fixed===0&&margin===0?'Indéfini':'Impossible';set('p-revenue',euro(revenue));set('p-costs',euro(cost));set('p-profit',euro(profit));set('p-break',typeof breakEven==='number'?breakEven+' ventes':breakEven);set('p-message',margin<=0?'La marge unitaire est nulle ou négative : augmenter les ventes ne couvre pas les charges fixes.':'Marge unitaire : '+euro(margin)+' ; taux de marge sur vente : '+(price?fmt(margin/price*100)+' %':'—')+'.');chart('p-chart',[{label:'Chiffre d’affaires',color:'#2468e7',values:[0,revenue,revenue]},{label:'Coûts',color:'#ee8b4c',values:[0,cost,cost]}])}
 const calculators={savings,budget,goal,profit};function go(id){current=id;for(const section of ['home',...Object.keys(calculators)])document.getElementById(section).classList.toggle('hidden',section!==id);document.querySelectorAll('[data-go]').forEach(b=>b.classList.toggle('active',b.dataset.go===id));if(calculators[id])requestAnimationFrame(calculators[id]);window.scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));for(const [section,fn] of Object.entries(calculators)){document.querySelectorAll('#'+section+' input').forEach(i=>i.addEventListener('input',fn))}document.getElementById('s-csv').addEventListener('click',()=>{savings();if(sRows.length)csvDownload('moneypilot-epargne.csv',sRows)});document.getElementById('b-csv').addEventListener('click',()=>{budget();if(budgetRows.length)csvDownload('moneypilot-budget.csv',budgetRows)});window.addEventListener('resize',()=>{if(calculators[current])calculators[current]()});document.getElementById('year').textContent=new Date().getFullYear();savings();budget();goal();profit();
-</script></body></html>
+</script>
+
+<div style="max-width:600px;margin:40px auto;padding:30px;text-align:center;background:#eff6ff;border:1px solid #bfdbfe;border-radius:20px;font-family:Arial,sans-serif;">
+  <h2 style="color:#1d4ed8;">MoneyPilot Budget Pro 💙</h2>
+  <p style="color:#334155;line-height:1.6;">
+    Gérez vos revenus, dépenses et économies avec un
+    tableau Excel automatisé et facile à utiliser.
+  </p>
+  <a href="https://payhip.com/b/26xXD"
+     target="_blank"
+     rel="noopener noreferrer"
+     style="display:inline-block;background:#2563eb;color:white;padding:15px 25px;border-radius:12px;text-decoration:none;font-weight:bold;">
+    Acheter Budget Pro — 9,90 €
+  </a>
+  <p style="font-size:12px;color:#64748b;margin-top:15px;">
+    Paiement sécurisé via Payhip • Fichier Excel à télécharger
+  </p>
+</div>
+</body></html>
